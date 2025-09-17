@@ -1,13 +1,14 @@
 <?php
 
-namespace App\Core\Utils;
+namespace App\Core\Utils\SQLBuilder;
 
-use App\Core\Enums\Operators\Comparison;
-use App\Core\Enums\Operators\Logical;
 use InvalidArgumentException;
+use App\Core\Enums\Operators\Logical;
+use App\Core\Enums\Operators\Comparison;
+use App\Core\Utils\SQLBuilder\Predicate;
 
-class WhereConditionBuilder {
-    public static function build(
+class Condition {
+    public static function generate(
         array $conditions,
         Logical $logical = Logical::AND,
         Comparison $comparison = Comparison::EQUALS
@@ -33,17 +34,18 @@ class WhereConditionBuilder {
         $columnFilter = array_keys($conditions); // The columns for WHERE
         // ECHO "values: "; print_r($values); ECHO "<BR>";
 
-        // Implode adds " $comparison ?" per elemet of the array
-        // Example: ["username", "password"] -> ["username = ?", "password = ?"]
+        // Creates predicates like "columnName = ?" per elemet of the array
         // Then contatenate each element of the array using the $logical
-        // Example: ["username = ?", "password = ?"] -> "username = ? AND password = ?"
-        $formattedColumnFilter = implode(
-            $logical->value,
-            array_map(fn($col) => "{$col} {$comparison->value} ?", $columnFilter)
+        $predicateWhere = Predicate::generate(
+            $columnFilter,
+            $comparison
         );
-        // ECHO "formattedColumnFilter: "; print_r($formattedColumnFilter); ECHO "<BR>";
+        // ECHO "predicateWhere: "; print_r($predicateWhere); ECHO "<BR>";
 
-        // Concatenates the complete WHERE expression
-        return "WHERE $formattedColumnFilter";
+        // Concatenates the complete WHERE expression and return it
+        return implode(
+            $logical->value,
+            $predicateWhere
+        );
     }
 }

@@ -11,7 +11,8 @@ use InvalidArgumentException;
 use App\Core\Enums\FetchOption;
 use App\Core\Enums\Operators\Logical;
 use App\Core\Enums\Operators\Comparison;
-use App\Core\Utils\WhereConditionBuilder;
+use App\Core\Utils\SQLBuilder\Condition;
+use App\Core\Utils\SQLBuilder\Predicate;
 
 class Database {
     protected $pdo;
@@ -89,7 +90,7 @@ class Database {
             // ECHO "values: "; print_r($values); ECHO "<BR>";
 
             // Generates the WHERE and concatenates it into the existing query
-            $sql .= " " . WhereConditionBuilder::build($conditions, $logical, $comparison);
+            $sql .= " " . Condition::generate($conditions, $logical, $comparison);
 
             // Intitiates the query
             // ECHO "sql datatype: "; print_r(gettype($sql)); ECHO "<BR>";
@@ -141,8 +142,12 @@ class Database {
         string $table,
         string $uid,
         array $data,
-        array $conditions,
+        Logical $logical = Logical::AND,
+        Comparison $comparison = Comparison::EQUALS,
+        FetchOption $fetchOption = FetchOption::FETCH
     ): PDOStatement|false {
+        // ECHO "uid: "; print_r($uid); ECHO "<BR>";
+
         // Separates the columns and the values
         // Example:
         //      data=["username"=>"admin, "password"=>"admin123"]
@@ -150,29 +155,42 @@ class Database {
         //      dataValues=["admin", "admin123"]
         $dataColumns = array_keys($data);
         $dataValues = array_values($data);
+        // ECHO "dataColumns: "; print_r($dataColumns); ECHO "<BR>";
+        // ECHO "dataValues: "; print_r($dataValues); ECHO "<BR>";
 
-        // // Adds a WHERE to the SQL query if $conditions are specified
-        // if (!empty($conditions)) {
-        //     $values = array_values($conditions); // The corresponding values
-        //     // ECHO "values: "; print_r($values); ECHO "<BR>";
+        // $values = array_values($conditions); // The corresponding values
+        // ECHO "values: "; print_r($values); ECHO "<BR>";
 
-        //     // Generates the WHERE and concatenates it into the existing query
-        //     $sql .= " " . WhereConditionBuilder::build($conditions, $logical, $comparison);
+        $predicateSet = Predicate::generate(
+            $data,
+            $comparison
+        );
+        ECHO "predicateSet: "; print_r($predicateSet); ECHO "<BR>";
 
-        //     // Intitiates the query
-        //     // ECHO "sql datatype: "; print_r(gettype($sql)); ECHO "<BR>";
-        //     return $this->query($sql, $values, $fetchOption);
-        // }
-
-        // $sql = "UPDATE $table SET $column = ? WHERE $column = ?";
+        // Generates the WHERE and concatenates it into the existing query
+        $conditions = Condition::generate([
+                "uid" => $uid,
+                "dsad" => "udkj"
+            ], 
+            $logical, 
+            $comparison
+        );
+        ECHO "conditions: "; print_r($conditions); ECHO "<BR>";
+        
+        // $sql = "UPDATE $table SET col = ?, WHERE ";
         // ECHO "sql: "; print_r($sql); ECHO "<BR>";
+
+        // Intitiates the query
+        // ECHO "sql datatype: "; print_r(gettype($sql)); ECHO "<BR>";
+        // return $this->query($sql, $values, $fetchOption);
+
         
         return false;
     }
 
 
     protected function destroy() {
-        $sql = "DELETE FROM $table WHERE $column = ?";
+        // $sql = "DELETE FROM $table WHERE $column = ?";
         return;
     }
 
