@@ -18,6 +18,11 @@ class User extends BaseModel{
             "dateDeleted",
         ];
 
+        $this->requires = [
+          "username",  
+          "password",  
+        ];
+
         parent::__construct(__CLASS__);
     }
 }

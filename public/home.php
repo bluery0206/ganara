@@ -23,8 +23,40 @@ $pageTitle = "Home";
 
     ?>
 
+
+    <!-- SELECT -->
     <div>
-        <?php print_r($model->get()); ?>
+        <?php 
+            print_r($model->get([
+                "username" => "aorikasumi",
+                "password" => "aorikasumi",
+            ])); 
+        ?>
+    </div>
+
+
+    <!-- INSERT -->
+    <div>
+        <?php 
+            // print_r($model->store([
+            //     "username" => "fdsfdsf",
+            //     "password" => "fdf"
+            // ])); 
+        ?>
+    </div>
+
+
+    <!-- UPDATE -->
+    <div>
+        <?php 
+            // print_r($model->edit(
+            //     "68cac08bb8459",
+            //     [
+            //         "username" => "fdsfdsf",
+            //         "password" => "fdf"
+            //     ]
+            // )); 
+        ?>
     </div>
 </body>
 </html>
