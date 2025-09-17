@@ -1,0 +1,33 @@
+
+@import 'button.css';
+@import 'variables.css';
+
+* {
+    box-sizing: border-box;
+}
+
+body {
+    background: #5e5ea6;
+}
+
+img {
+    border: 1px solid red;
+}
+
+section {
+    border: 1px solid red;
+    padding: 1em;
+    margin: 1em 0;
+}
+
+nav {
+    display: flex;
+    justify-content: space-between;
+    background: white;
+    padding: 10px;
+}
+
+.active {
+    background: red;
+    color: white;
+}
