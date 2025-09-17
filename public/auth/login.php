@@ -2,7 +2,7 @@
 
 include "../../bootstrap.php";
 
-$title = "Login";
+$pageTitle = "Login";
 
 ?>
 

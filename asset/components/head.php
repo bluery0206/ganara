@@ -4,6 +4,6 @@
     <link rel="stylesheet" href="<?= asset("css/main.css") ?>">
     <title>
         BP
-        <?= $title ? "| $title" : "" ?>
+        <?= $pageTitle ? "| $pageTitle" : "" ?>
     </title>
 </head>

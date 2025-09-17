@@ -1,8 +1,10 @@
 <?php 
 
+use App\Models\User;
+
 include "../bootstrap.php";
 
-$title = "Home";
+$pageTitle = "Home";
 
 ?>
 
@@ -14,5 +16,15 @@ $title = "Home";
 
 <body>
     <?php include asset("components/nav/nav-main.php") ?>
+
+    <?php 
+    
+    $model = new User();
+
+    ?>
+
+    <div>
+        <?php print_r($model->get()); ?>
+    </div>
 </body>
 </html>
