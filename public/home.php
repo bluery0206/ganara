@@ -23,24 +23,25 @@ $pageTitle = "Home";
     <!-- SELECT -->
     <div>
         <?php 
-            // print_r($model->get([
-            //     "username" => "aorikasumi",
-            //     "password" => "aorikasumi",
-            // ])); 
-        ?>
+        //     $user = $model->get([
+        //         "username" => "clark.namay",
+        //         "password" => "clark.namay",
+        //     ]);
+        // ?>
     </div>
 
 
     <!-- INSERT -->
     <div>
         <?php
-            // $random = rand();
+            // $ran = uniqid();
+
             // $res = $model->store([
-            //     "username" => $random,
-            //     "password" => $random
+            //     "username" => $ran,
+            //     "password" => $ran,
             // ]);
 
-            // var_dump($res);
+            // echo $res->username;
         ?>
     </div>
 
@@ -48,7 +49,7 @@ $pageTitle = "Home";
     <!-- UPDATE -->
     <div>
         <?php 
-            // $res = $model->edit("68cb61d154f3a", [
+            // $res = $model->edit("68cb7259f1483", [
             //     "username" => "fiona.young",
             //     "password" => "fiona.young",
             // ]);
@@ -61,7 +62,7 @@ $pageTitle = "Home";
     <!-- DELETE -->
     <div>
         <?php 
-            // $res = $model->delete("68cb61d154f3a");
+            // $res = $model->delete("68cb7c052dff6");
 
             // var_dump($res); 
         ?>
@@ -71,9 +72,9 @@ $pageTitle = "Home";
     <!-- DELETE ALL WITH CONDITION -->
     <div>
         <?php
-            // $res = $model->deleteAll(["isJudge" => 1]);
+            $res = $model->deleteAll(["isJudge" => 1]);
 
-            // var_dump($res); 
+            var_dump($res); 
         ?>
     </div>
 </body>

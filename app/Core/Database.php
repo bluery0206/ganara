@@ -98,7 +98,7 @@ class Database {
         // Contatenate each element of the array using a separator
         // Example: implode(", ", ["username", "password"]) -> "username, password"
         $formattedColumnReturn = implode(", ", $columnReturn);
-        
+
         // Base SQL query that selects all rows from $table
         // Unless $conditions are supplied
         $sql = "SELECT $formattedColumnReturn FROM $table";
@@ -115,7 +115,7 @@ class Database {
             // Intitiates the query
             return $this->query($sql, $values, $fetchOption);
         }
-        
+
         // return false; // For debugging
 
         return $this->query($sql, option: $fetchOption);
@@ -128,7 +128,7 @@ class Database {
      * @param array $data
      * @return bool|PDOStatement|stdClass
      */
-    protected function insert(string $table, array $data): StdClass|PDOStatement|bool {
+    protected function insert(string $table, array $data): stdClass|bool {
         // Separates the columns and the values
         // Example:
         //      data=["username"=>"admin, "password"=>"admin123"]
@@ -172,7 +172,7 @@ class Database {
         array $data,
         Logical $logical = Logical::AND,
         Comparison $comparison = Comparison::EQUALS,
-    ): PDOStatement|bool {
+    ): stdClass|bool {
         // ECHO "uid: "; print_r($uid); ECHO "<BR>";
 
         // Using Condition class to generates predicates separated by ", " for 
@@ -206,7 +206,7 @@ class Database {
         Comparison $comparison = Comparison::EQUALS
     ): bool {
         $sql = "DELETE FROM $table";
-        ECHO "sql: "; print_r($sql); ECHO "<BR>";
+        // ECHO "sql: "; print_r($sql); ECHO "<BR>";
 
         if ($conditions == "all") {
             return $this->query($sql);

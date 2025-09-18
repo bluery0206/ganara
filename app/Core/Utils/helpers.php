@@ -89,3 +89,66 @@ function pluralize(string $word): string {
             return "{$word}s";
     }
 }
+
+
+/**
+ * Summary of checkMissingKeys
+ * @param mixed $required
+ * @param mixed $data
+ * @throws \InvalidArgumentException
+ * @return array
+ */
+function checkMissingKeys($required, $data): array {
+    $lackingKeys = [];
+
+    // Checks if the $this->requires columns are supplied in $data
+    foreach ($required as $value) {
+        // ECHO "value: "; print_r($value); ECHO "<BR>";
+
+        if (!key_exists($value, $data)) {
+            array_push($lackingKeys, $value);
+        }
+    }
+
+    if ($lackingKeys) {
+        $lackingKeys = implode(", ", $lackingKeys);
+
+        throw new InvalidArgumentException(
+            "Required column(s) \"{$lackingKeys}\" not specified."
+        );
+    }
+
+    return $lackingKeys;
+}
+
+
+/**
+ * Summary of checkWrongKeys
+ * @param mixed $allowed
+ * @param mixed $data
+ * @throws \InvalidArgumentException
+ * @return array
+ */
+function checkWrongKeys($allowed, $data): array {
+    $wrongKeys = [];
+
+    ECHO "allowed: "; print_r($allowed); ECHO "<BR>";
+    ECHO "data: "; print_r($data); ECHO "<BR>";
+
+    // Checks if the $this->requires columns are supplied in $data
+    foreach ($data as $value) {
+        if (!in_array($value, $allowed)) {
+            array_push($wrongKeys, $value);
+        }
+    }
+
+    if ($wrongKeys) {
+        $wrongKeys = implode(", ", $wrongKeys);
+
+        throw new InvalidArgumentException(
+            "Column(s) \"{$wrongKeys}\" is/are not allowed."
+        );
+    }
+
+    return $wrongKeys;
+}

@@ -72,6 +72,8 @@ class BaseModel extends Database {
         Comparison $comparisonOperators = Comparison::EQUALS,
         FetchOption $fetchOption = FetchOption::FETCH
     ): stdClass|bool {
+        checkWrongKeys($this->columns, array_keys($conditions));
+
         return $this->select(
             $this->table,
             $conditions, 
@@ -91,33 +93,17 @@ class BaseModel extends Database {
      */
     public function store(
         array $data,
-    ): StdClass|PDOStatement|bool {
-        ECHO "data: "; var_dump($data); ECHO "<BR>";
+    ): StdClass|bool {
+        // ECHO "data: "; var_dump($data); ECHO "<BR>";
 
-        $lackingKeys = [];
-
-        // Checks if the $this->requires columns are supplied in $data
-        foreach ($this->requires as $value) {
-            // ECHO "value: "; print_r($value); ECHO "<BR>";
-            
-            if (!key_exists($value, $data)) {
-                array_push($lackingKeys, $value);
-            }
-        }
-
-        if ($lackingKeys) {
-            $lackingKeys = implode(", ", $lackingKeys);
-
-            throw new InvalidArgumentException(
-                "Required column(s) \"{$lackingKeys}\" not specified."
-            );
-        }
+        checkMissingKeys($this->requires, $data);
+        checkWrongKeys($this->columns, array_keys($data));
 
         $res = $this->insert($this->table, $data);
-        ECHO "idk: "; var_dump($res); ECHO "<BR>";
+        // ECHO "idk: "; var_dump($res); ECHO "<BR>";
 
         // Returns the created data
-        return $this->get($data);
+        return $res ? $this->get($data) : false;
     }
 
 
@@ -125,14 +111,16 @@ class BaseModel extends Database {
      * Summary of edit
      * @param string $uid
      * @param array $data
-     * @return bool|PDOStatement|stdClass
+     * @return stdClass|bool
      */
     public function edit(string $uid, array $data): stdClass|bool {
+        checkWrongKeys($this->columns, array_keys($data));
+
         $res = $this->update($this->table, $uid, $data);
         // ECHO "idk: "; var_dump($res); ECHO "<BR>";
 
         // Returns the updated user data
-        return $this->get($data);
+        return $res ? $this->get(["uid" => $uid]) : false;
     }
 
 
