@@ -23,6 +23,17 @@ class User extends BaseModel{
           "password",  
         ];
 
+        $this->rules = [
+            "username" => [
+                "min" => 3,
+                "max" => 25,
+            ],
+            "password" => [
+                "min" => 3,
+                "max" => 255,
+            ],
+        ];
+
         parent::__construct(__CLASS__);
     }
 }

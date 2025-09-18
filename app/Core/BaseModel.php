@@ -36,6 +36,12 @@ class BaseModel extends Database {
      */
     protected array $requires;
 
+    /**
+     * Summary of rules
+     * @var array
+     */
+    public array $rules;
+ 
 
     /**
      * Summary of __construct
