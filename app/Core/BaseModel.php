@@ -37,6 +37,10 @@ class BaseModel extends Database {
     protected array $requires;
 
 
+    /**
+     * Summary of __construct
+     * @param string $name
+     */
     public function __construct(string $name) {
         // __CLASS__ returns the namespace of the class (i.e.: App\Core\BaseModel)
         // and basename() returns the last folder or file name but
@@ -79,9 +83,17 @@ class BaseModel extends Database {
     }
 
 
+    /**
+     * Summary of store
+     * @param array $data
+     * @throws \InvalidArgumentException
+     * @return bool|PDOStatement
+     */
     public function store(
         array $data,
-    ): PDOStatement|false {
+    ): StdClass|PDOStatement|bool {
+        ECHO "data: "; var_dump($data); ECHO "<BR>";
+
         $lackingKeys = [];
 
         // Checks if the $this->requires columns are supplied in $data
@@ -101,22 +113,56 @@ class BaseModel extends Database {
             );
         }
 
-        return $this->insert(
-            $this->table, 
-            $data
-        );
+        $res = $this->insert($this->table, $data);
+        ECHO "idk: "; var_dump($res); ECHO "<BR>";
+
+        // Returns the created data
+        return $this->get($data);
     }
 
-    public function edit(
-        string $uid,
-        array $data
-    ): PDOStatement|false {
 
-        
-        return $this->update(
-            $this->table, 
-            $uid,
-            $data
-        );
+    /**
+     * Summary of edit
+     * @param string $uid
+     * @param array $data
+     * @return bool|PDOStatement|stdClass
+     */
+    public function edit(string $uid, array $data): stdClass|bool {
+        $res = $this->update($this->table, $uid, $data);
+        // ECHO "idk: "; var_dump($res); ECHO "<BR>";
+
+        // Returns the updated user data
+        return $this->get($data);
+    }
+
+
+    /**
+     * Summary of delete
+     * @param bool $softDelete // if true, "deletes" by setting a "deleted_at" timestamp 
+     * @return bool
+     */
+    public function delete(string $uid, bool $softDelete = true): bool {
+        // Soft delete doesn't actually delete the record
+        // but sets the "dateDeleted" column to the current timestamp
+        if ($softDelete) {
+            return $this->update($this->table, $uid, [
+                "dateDeleted" => date("Y-m-d H:i:s")
+            ]);
+        }
+
+        return $this->destroy($this->table, ["uid" => $uid] );
+    }
+
+
+    /**
+     * Summary of deleteAll
+     * @param array $conditions
+     * @return bool
+     */
+    public function deleteAll(array $conditions = []): bool {
+        if ($conditions) {
+            return $this->destroy($this->table, $conditions);
+        }
+        return $this->destroy($this->table, "all");
     }
 }

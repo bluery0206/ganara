@@ -3,6 +3,7 @@
 namespace App\Core\Utils\SQLBuilder;
 
 use InvalidArgumentException;
+use App\Core\Enums\Separators;
 use App\Core\Enums\Operators\Logical;
 use App\Core\Enums\Operators\Comparison;
 use App\Core\Utils\SQLBuilder\Predicate;
@@ -10,7 +11,7 @@ use App\Core\Utils\SQLBuilder\Predicate;
 class Condition {
     public static function generate(
         array $conditions,
-        Logical $logical = Logical::AND,
+        Logical|Separators $logical = Logical::AND,
         Comparison $comparison = Comparison::EQUALS
     ): string {
         // ECHO "conditions: "; print_r($conditions); ECHO "<BR>";

@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Core\Utils\SQLBuilder;
+namespace App\Core\Enums;
 
 enum Separators: string {
     case COMMA = ", ";
