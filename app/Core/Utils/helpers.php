@@ -132,8 +132,8 @@ function checkMissingKeys($required, $data): array {
 function checkWrongKeys($allowed, $data): array {
     $wrongKeys = [];
 
-    ECHO "allowed: "; print_r($allowed); ECHO "<BR>";
-    ECHO "data: "; print_r($data); ECHO "<BR>";
+    // ECHO "allowed: "; print_r($allowed); ECHO "<BR>";
+    // ECHO "data: "; print_r($data); ECHO "<BR>";
 
     // Checks if the $this->requires columns are supplied in $data
     foreach ($data as $value) {
