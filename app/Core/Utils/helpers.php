@@ -6,8 +6,13 @@ use App\Core\Exceptions\InvalidRouteException;
 
 
 /**
- * Summary of redirect
+ * Redirect the client to a public PHP page.
+ *
+ * Similar to Django's `redirect()`, but instead of a route name
+ * it expects the base filename (without `.php`) of a public page.
+ *
  * @param string $url
+ *     The base filename of the target page (e.g. `"dashboard"`).
  * @return void
  */
 function redirect(string $url) {
@@ -15,10 +20,18 @@ function redirect(string $url) {
 }
 
 
+
 /**
- * Summary of route
+ * Resolve a public URL from a page name.
+ *
+ * Works like Django's `reverse()` but without named routes.
+ * It checks that the corresponding file exists in the public
+ * directory before returning the full URL.
+ *
  * @param string $name
+ *     Base filename (without `.php`) located in DIR_PUBLIC.
  * @return string
+ *     Full public URL to the PHP file.
  */
 function route(string $name): string {
     $filePath = DIR_PUBLIC . "/$name.php";
@@ -32,9 +45,20 @@ function route(string $name): string {
 
 
 /**
- * Summary of asset
+ * Get the correct path or URL to a static asset.
+ *
+ * Returns a public URL for typical assets (CSS, JS, images, etc.).
+ * If the requested file is a PHP script, it returns the absolute
+ * server path instead—handy when you need to `include` or `require`
+ * that PHP file instead of linking to it.
+ *
  * @param string $relativePath
+ *     Path to the asset relative to the assets directory
+ *     (e.g. `"css/app.css"` or `"partials/header.php"`).
+ *
  * @return string
+ *     - For non-PHP files: Full public URL to the asset.
+ *     - For `.php` files: Absolute filesystem path.
  */
 function asset(string $relativePath): string {
     $extension = pathinfo($relativePath, PATHINFO_EXTENSION);

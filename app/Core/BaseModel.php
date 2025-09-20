@@ -10,35 +10,57 @@ use App\Core\Enums\FetchOption;
 use App\Core\Enums\Operators\Logical;
 use App\Core\Enums\Operators\Comparison;
 
+
+/**
+ * Class BaseModel
+ *
+ * Base data-access layer that extends the core Database class.
+ * Provides generic CRUD helpers for models so individual model
+ * classes can focus on their own logic instead of repeating
+ * query boilerplate.
+ *
+ * Typical usage:
+ * - Auto-sets `$name` and `$table` based on the subclass name.
+ * - Validates column keys before database operations.
+ * - Wraps common SQL actions (`select`, `insert`, `update`, `destroy`).
+ *
+ * @package App\Core
+ */
 class BaseModel extends Database {
     /**
-     * Summary of name
+     * Name of the model, derived from the subclass (pluralized + lowercased).
      * @var string
      */
     public string $name;
 
     /**
-     * Summary of table
+     * Database table name matching this model.
      * @var string
      */
     protected string $table;
 
     /**
-     * Summary of columns
+     * List of valid column names for this model’s table.
+     * Used for key validation.
      * @var array
      */
     public array $columns;
 
     /**
-     * Summary of rules
+     * Validation or business rules tied to the model’s data.
      * @var array
      */
     public array $rules;
  
 
     /**
-     * Summary of __construct
-     * @param string $name
+     * Construct a BaseModel.
+     *
+     * Sets `$name` and `$table` automatically from the provided
+     * fully qualified class name and initializes the database
+     * connection.
+     *
+     * @param string $name Fully qualified class name of the child model.
      */
     public function __construct(string $name) {
         // __CLASS__ returns the namespace of the class (i.e.: App\Core\BaseModel)
@@ -56,13 +78,15 @@ class BaseModel extends Database {
 
 
     /**
-     * Wrapper method
-     * @param array $conditions
-     * @param array $columnReturn
-     * @param Logical $logicalOperator
-     * @param Comparison $comparisonOperators
-     * @param FetchOption $fetchOption
-     * @return PDOStatement|false
+     * Retrieve records from the table.
+     *
+     * @param array         $conditions  Optional WHERE conditions.
+     * @param array         $columnReturn Columns to return, defaults to `["*"]`.
+     * @param Logical       $logicalOperator Logical operator to join conditions.
+     * @param Comparison    $comparisonOperators Comparison operator for each condition.
+     * @param FetchOption   $fetchOption Fetch mode (single or all).
+     *
+     * @return stdClass|bool Single record as object, or false if none found.
      */
     public function get(
         array $conditions = [], 
@@ -85,10 +109,11 @@ class BaseModel extends Database {
 
 
     /**
-     * Summary of store
-     * @param array $data
-     * @throws \InvalidArgumentException
-     * @return bool|PDOStatement
+     * Insert a new record into the table.
+     *
+     * @param array $data Key/value pairs to insert.
+     *
+     * @return stdClass|bool The created record as object, or false on failure.
      */
     public function store(
         array $data,
@@ -106,10 +131,12 @@ class BaseModel extends Database {
 
 
     /**
-     * Summary of edit
-     * @param string $uid
-     * @param array $data
-     * @return stdClass|bool
+     * Update an existing record by unique identifier.
+     *
+     * @param string    $uid  Unique identifier (e.g., primary key).
+     * @param array     $data Data to update.
+     *
+     * @return stdClass|bool The updated record as object, or false on failure.
      */
     public function edit(string $uid, array $data): stdClass|bool {
         checkWrongKeys($this->columns, array_keys($data));
@@ -123,9 +150,13 @@ class BaseModel extends Database {
 
 
     /**
-     * Summary of delete
-     * @param bool $softDelete // if true, "deletes" by setting a "deleted_at" timestamp 
-     * @return bool
+     * Delete a record by unique identifier.
+     *
+     * @param string $uid        Unique identifier.
+     * @param bool   $softDelete If true, sets a "dateDeleted" timestamp
+     *                           instead of a hard delete.
+     *
+     * @return bool True on success, false otherwise.
      */
     public function delete(string $uid, bool $softDelete = true): bool {
         // Soft delete doesn't actually delete the record
@@ -141,9 +172,12 @@ class BaseModel extends Database {
 
 
     /**
-     * Summary of deleteAll
-     * @param array $conditions
-     * @return bool
+     * Delete multiple records or the entire table.
+     *
+     * @param array $conditions Optional WHERE conditions.
+     *                          If empty, deletes all records.
+     *
+     * @return bool True on success, false otherwise.
      */
     public function deleteAll(array $conditions = []): bool {
         if ($conditions) {

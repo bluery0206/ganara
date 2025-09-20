@@ -6,18 +6,22 @@ use InvalidArgumentException;
 
 
 /**
- * Summary of Validator
+ * Class Validator
+ *
+ * Provides a set of static validation helpers for model data.
+ * Each validator returns a two-item array: [bool $isValid, string $message].
  */
 class Validator {
 
 
     /**
-     * Summary of min
-     * @param int $min
-     * @param string|int $value
-     * @param string $errorMessage
-     * @throws \InvalidArgumentException
-     * @return array<bool|string>
+     * Validate that a string’s length or integer value is at least $min.
+     *
+     * @param int           $min          Minimum length or value.
+     * @param string|int    $value        Value to validate.
+     * @param string        $errorMessage Message returned when validation fails.
+     *
+     * @return array [true, 'Valid'] or [false, $errorMessage].
      */
     public static function min(
         int $min, 
@@ -39,12 +43,13 @@ class Validator {
 
 
     /**
-     * Summary of max
-     * @param int $max
-     * @param string|int $value
-     * @param string $errorMessage
-     * @throws \InvalidArgumentException
-     * @return array<bool|string>
+     * Validate that a string’s length or integer value does not exceed $max.
+     *
+     * @param int           $max          Maximum length or value.
+     * @param string|int    $value        Value to validate.
+     * @param string        $errorMessage Message returned when validation fails.
+     *
+     * @return array [true, 'Valid'] or [false, $errorMessage].
      */
     public static function max(
         int $max, 
@@ -66,10 +71,12 @@ class Validator {
 
 
     /**
-     * Summary of required
-     * @param mixed $value
-     * @param string $errorMessage
-     * @return array<bool|string>
+     * Ensure a value is not empty.
+     *
+     * @param mixed     $value        Value to validate.
+     * @param string    $errorMessage Message returned when empty.
+     *
+     * @return array [true, 'Valid'] or [false, $errorMessage].
      */
     public static function required(
         mixed $value,
@@ -80,10 +87,12 @@ class Validator {
 
 
     /**
-     * Summary of email
-     * @param mixed $value
-     * @param string $errorMessage
-     * @return array<bool|string>
+     * Validate that a value matches a valid email format.
+     *
+     * @param mixed     $value        Value to validate.
+     * @param string    $errorMessage Message returned when empty.
+     *
+     * @return array [true, 'Valid'] or [false, $errorMessage].
      */
     public static function email(
         mixed $value,
@@ -94,10 +103,12 @@ class Validator {
 
 
     /**
-     * Summary of validate
-     * @param \App\Core\BaseModel $model
-     * @param array $data
-     * @return array<array>
+     * Run all validation rules defined in a BaseModel against supplied data.
+     *
+     * @param BaseModel $model Model instance containing $columns and $rules arrays.
+     * @param array     $data  Key/value pairs to validate.
+     *
+     * @return array Map of field name → list of validation failures.
      */
     public static function validate(BaseModel $model, array $data): array {
         $modelRules = $model->rules;

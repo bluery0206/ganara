@@ -8,7 +8,46 @@ use App\Core\Enums\Operators\Logical;
 use App\Core\Enums\Operators\Comparison;
 use App\Core\Utils\SQLBuilder\Predicate;
 
+
+/**
+ * Class Condition
+ *
+ * Utility for building SQL WHERE conditions.  
+ * Validates that each condition includes a column key and
+ * then generates predicates joined by a logical operator
+ * or separator.
+ *
+ * Example:
+ * ```php
+ * Condition::generate(
+ *     ['username' => 'aori', 'status' => 'active'],
+ *     Logical::AND,
+ *     Comparison::EQUALS
+ * );
+ * // Outputs: "username = ? AND status = ?"
+ * ```
+ *
+ * @package App\Core\Utils\SQLBuilder
+ */
 class Condition {
+
+
+    /**
+     * Build a SQL WHERE clause from an associative array of column/value pairs.
+     *
+     * @param array<string,mixed> $conditions
+     *     Key/value pairs where the key is the column name
+     *     and the value is the expected value to bind.
+     * @param Logical|Separators $logical
+     *     How to join multiple predicates (e.g. `Logical::AND`, `Separators::COMMA`).
+     *     Defaults to `Logical::AND`.
+     * @param Comparison $comparison
+     *     Comparison operator for each predicate (e.g. `Comparison::EQUALS`, `Comparison::LIKE`).
+     *     Defaults to `Comparison::EQUALS`.
+     *
+     * @return string
+     *     A full WHERE clause string with placeholders, ready for prepared statements.
+     */
     public static function generate(
         array $conditions,
         Logical|Separators $logical = Logical::AND,

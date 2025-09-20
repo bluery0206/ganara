@@ -14,11 +14,30 @@ use App\Core\Enums\Operators\Logical;
 use App\Core\Enums\Operators\Comparison;
 use App\Core\Utils\SQLBuilder\Condition;
 
+
+/**
+ * Class Database
+ *
+ * Core database abstraction built on PDO.
+ * Handles connections and provides protected helpers for
+ * common CRUD operations that child classes (e.g. BaseModel)
+ * can reuse safely.
+ *
+ * @package App\Core
+ */
 class Database {
+    /**
+     * Active PDO connection instance.
+     * @var PDO
+     */
     protected $pdo;
 
+
     /**
-     * Summary of __construct
+     * Initialize a Database instance.
+     *
+     * Uses environment variables (`DB_NAME`, `DB_HOST`,
+     * `DB_USERNAME`, `DB_PASSWORD`) to create the PDO connection.
      */
     protected function __construct() {
         $this->pdo = $this->connect(
@@ -31,12 +50,14 @@ class Database {
 
 
     /**
-     * Summary of connect
-     * @param string $database
-     * @param string $hostname
-     * @param string $username
-     * @param string $password
-     * @return PDO
+     * Create a new PDO connection.
+     *
+     * @param string $database  Database name.
+     * @param string $hostname  Hostname of the database server.
+     * @param string $username  Database user.
+     * @param string $password  Database user password.
+     *
+     * @return PDO Active PDO connection.
      */
     protected function connect(
         string $database,
@@ -53,13 +74,19 @@ class Database {
 
 
     /**
-     * Summary of query
-     * @param string $sql
-     * @param array $values
-     * @param \App\Core\Enums\FetchOption $option
-     * @return \stdClass|\PDOStatement|bool
+     * Prepare and execute a SQL query.
+     *
+     * @param string            $sql     Raw SQL statement with placeholders.
+     * @param array             $values  Values to bind to placeholders.
+     * @param FetchOption|null  $option  Optional fetch mode (e.g. FETCH or FETCH_ALL).
+     *
+     * @return stdClass|bool Result object or true/false for non-fetch queries.
      */
-    protected function query(string $sql, array $values = [], FetchOption|Null $option = Null): stdClass|bool {
+    protected function query(
+        string $sql, 
+        array $values = [], 
+        FetchOption|Null $option = Null
+    ): stdClass|bool {
         $stmt = $this->pdo->prepare($sql);
         $res = $stmt->execute($values);
 
@@ -73,17 +100,18 @@ class Database {
 
 
     /**
-     * Summary of select
-     * 
-     * Only supports one comparison and logical operator per query
-     * @param string $table
-     * @param array $conditions
-     * @param array $columnReturn
-     * @param Logical $logical
-     * @param Comparison $comparison
-     * @param FetchOption $fetchOption
-     * @throws \InvalidArgumentException
-     * @return bool|PDOStatement
+     * Run a SELECT statement with optional conditions.
+     *
+     * Supports a single logical and comparison operator across all conditions.
+     *
+     * @param string        $table          Table name.
+     * @param array         $conditions     Optional WHERE key/value pairs.
+     * @param array         $columnReturn   Columns to return, defaults to ["*"].
+     * @param Logical       $logical        Logical operator to join conditions.
+     * @param Comparison    $comparison     Comparison operator for each condition.
+     * @param FetchOption   $fetchOption    Fetch mode.
+     *
+     * @return stdClass|bool Query result or false if no records.
      */
     protected function select(
         string $table, 
@@ -123,10 +151,12 @@ class Database {
 
 
     /**
-     * Summary of insert
-     * @param string $table
-     * @param array $data
-     * @return bool|PDOStatement|stdClass
+     * Insert a new row and automatically generate a `uid` primary key.
+     *
+     * @param string    $table Table name.
+     * @param array     $data  Key/value pairs for the insert.
+     *
+     * @return stdClass|bool Insert result or false on failure.
      */
     protected function insert(string $table, array $data): stdClass|bool {
         // Separates the columns and the values
@@ -157,14 +187,15 @@ class Database {
 
 
     /**
-     * Summary of update
-     * @param string $table
-     * @param string $uid
-     * @param array $data
-     * @param Logical $logical
-     * @param Comparison $comparison
-     * @param FetchOption $fetchOption
-     * @return bool|PDOStatement|stdClass
+     * Update an existing row identified by its UID.
+     *
+     * @param string        $table      Table name.
+     * @param string        $uid        Unique identifier of the row.
+     * @param array         $data       Columns and values to update.
+     * @param Logical       $logical    Logical operator for WHERE clause.
+     * @param Comparison    $comparison Comparison operator for WHERE clause.
+     *
+     * @return stdClass|bool Update result or false on failure.
      */
     protected function update(
         string $table,
@@ -196,8 +227,14 @@ class Database {
 
 
     /**
-     * Summary of destroy
-     * @return bool
+     * Delete rows from a table.
+     *
+     * @param string        $table      Table name.
+     * @param array|string  $conditions Key/value conditions or "all" to delete every row.
+     * @param Logical       $logical    Logical operator for WHERE clause.
+     * @param Comparison    $comparison Comparison operator for WHERE clause.
+     *
+     * @return bool True on success, false otherwise.
      */
     protected function destroy(
         string $table,
@@ -224,11 +261,13 @@ class Database {
 
 
     /**
-     * Summary of exists
-     * @param mixed $table
-     * @param mixed $column
-     * @param string $value
-     * @return bool|stdClass
+     * Check if a value exists in a given column.
+     *
+     * @param string $table  Table name.
+     * @param string $column Column name to search.
+     * @param string $value  Value to match.
+     *
+     * @return bool True if a matching record exists, false otherwise.
      */
     protected function exists($table, $column, string $value): bool {
         $sql = "SELECT EXISTS(SELECT 1 FROM $table WHERE $column = ?)";
