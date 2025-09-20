@@ -1,7 +1,8 @@
 <?php 
 
-use App\Core\Validator;
 use App\Models\User;
+use App\Core\BaseModel;
+use App\Core\Validator;
 
 include "../bootstrap.php";
 
@@ -81,52 +82,22 @@ $pageTitle = "Home";
     </div>
 
 
-    <!-- DELETE ALL WITH CONDITION -->
     <div>
         <?php
 
 
-
-$inputData = [
-    "username" => "",
+// Dummy data
+$data = [
+    "username" => "dd",
+    "email" => "fiona.young@gmail.com",
     "password" => "fiona.young",
 ];
 
-$rules = $model->rules;
-
-echo "<BR>input: "; var_dump($inputData);
-echo "<BR>rules: "; var_dump($rules);
-
-$inputKeys = array_keys($inputData);
-$inputValues = array_values($inputData);
-
-$rulesKeys = array_keys($rules);
-$rulesValues = array_values($rules);
-
-checkWrongKeys($rulesKeys, $inputKeys);
-
-foreach ($inputKeys as $input) {
-    echo "<BR>INPUT: {$input}";
-    echo "<BR>RULES: "; var_dump($rules[$input]);
-
-    foreach ($rules[$input] as $rule => $value) {
-        echo "<BR>{$rule} => {$value} ||||| ";
-
-        switch ($rule) {
-            case 'min':
-                echo "min: " . Validator::min($value, $inputData[$input]);
-                break;
-            case 'max':
-                echo "max: " . Validator::max($value, $value);
-                break;
-            default:
-                # code...
-                break;
-        }
-    }
-}
 
 
+$violations = Validator::validate($model, $data);
+echo "Violations: <BR>";
+var_dump($violations);
 
         ?>
     </div>

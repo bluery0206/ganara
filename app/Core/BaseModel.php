@@ -30,13 +30,6 @@ class BaseModel extends Database {
     public array $columns;
 
     /**
-     * The required columns
-     * Example: ["username", "password"]
-     * @var array
-     */
-    protected array $requires;
-
-    /**
      * Summary of rules
      * @var array
      */
@@ -102,7 +95,6 @@ class BaseModel extends Database {
     ): StdClass|bool {
         // ECHO "data: "; var_dump($data); ECHO "<BR>";
 
-        checkMissingKeys($this->requires, $data);
         checkWrongKeys($this->columns, array_keys($data));
 
         $res = $this->insert($this->table, $data);

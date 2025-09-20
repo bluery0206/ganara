@@ -10,6 +10,7 @@ class User extends BaseModel{
             "uid",
             "username",
             "password",
+            "email",
             "isAdmin",
             "isStaff",
             "isJudge",
@@ -18,20 +19,10 @@ class User extends BaseModel{
             "dateDeleted",
         ];
 
-        $this->requires = [
-          "username",  
-          "password",  
-        ];
-
         $this->rules = [
-            "username" => [
-                "min" => 3,
-                "max" => 25,
-            ],
-            "password" => [
-                "min" => 3,
-                "max" => 255,
-            ],
+            "username" => "min:3|max:25|required",
+            "password" => "min:3|max:255|required",
+            "email" => "min:3|max:255|email",
         ];
 
         parent::__construct(__CLASS__);
