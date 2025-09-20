@@ -3,9 +3,7 @@
 namespace App\Core;
 
 use stdClass;
-use PDOStatement;
 use App\Core\Database;
-use InvalidArgumentException;
 use App\Core\Enums\FetchOption;
 use App\Core\Enums\Operators\Logical;
 use App\Core\Enums\Operators\Comparison;
@@ -91,6 +89,7 @@ class BaseModel extends Database {
     public function get(
         array $conditions = [], 
         array $columnReturn = ["*"],
+        array $extras = [],
         Logical $logicalOperator = Logical::AND,
         Comparison $comparisonOperators = Comparison::EQUALS,
         FetchOption $fetchOption = FetchOption::FETCH
@@ -101,6 +100,7 @@ class BaseModel extends Database {
             $this->table,
             $conditions, 
             $columnReturn, 
+            $extras,
             $logicalOperator, 
             $comparisonOperators, 
             $fetchOption, 
@@ -126,6 +126,7 @@ class BaseModel extends Database {
     public function like(
         array $conditions = [], 
         array $columnReturn = ["*"],
+        array $extras = [],
         Logical $logicalOperator = Logical::AND,
         Comparison $comparisonOperators = Comparison::LIKE,
         FetchOption $fetchOption = FetchOption::FETCH_ALL
@@ -135,7 +136,8 @@ class BaseModel extends Database {
         return $this->select(
             $this->table,
             $conditions, 
-            $columnReturn, 
+            $columnReturn,
+            $extras,
             $logicalOperator, 
             $comparisonOperators, 
             $fetchOption, 

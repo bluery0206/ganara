@@ -1,10 +1,7 @@
 <?php 
 
-use App\Models\User;
-use App\Core\BaseModel;
-use App\Core\Validator;
 use App\Core\Enums\FetchOption;
-use App\Core\Enums\Operators\Comparison;
+use App\Models\User;
 
 include "../bootstrap.php";
 
@@ -29,12 +26,25 @@ $pageTitle = "Home";
     <div>
         <?php 
             $users = $model->like([
-                "username" => "aori",
-                "password" => "aori",
-            ]);
+                    "username" => "aori"
+                ],
+                extras: [
+                    "groupBy" => 'username',
+                    "orderBy" => ["username", "ASC"],
+                    "limit" => 10
+                ],
+                fetchOption: FetchOption::FETCH_ALL
+            );
 
-            foreach ($users as $user) {
-                echo $user->username . "<BR>";
+            if (is_array($users)) {
+                foreach ($users as $user) {
+                    echo "USERNAME: $user->username<BR>";
+                    echo "PASSWORd: $user->password<BR>";
+                    echo "<BR>";
+                }
+            }
+            else {
+                print_r($users);
             }
         ?>
     </div>
@@ -103,7 +113,6 @@ $pageTitle = "Home";
             // $violations = Validator::validate($model, $data);
             // echo "Violations: <BR>";
             // var_dump($violations);
-
         ?>
     </div>
 </body>

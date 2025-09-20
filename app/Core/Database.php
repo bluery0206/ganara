@@ -6,13 +6,12 @@ namespace App\Core;
 
 use PDO;
 use stdClass;
-use PDOStatement;
-use InvalidArgumentException;
 use App\Core\Enums\Separators;
 use App\Core\Enums\FetchOption;
 use App\Core\Enums\Operators\Logical;
 use App\Core\Enums\Operators\Comparison;
 use App\Core\Utils\SQLBuilder\Condition;
+use App\Core\Utils\SQLBuilder\Extras;
 
 
 /**
@@ -100,23 +99,33 @@ class Database {
 
 
     /**
-     * Run a SELECT statement with optional conditions.
+     * Execute a flexible SELECT query with optional filtering and SQL “extras.”
      *
-     * Supports a single logical and comparison operator across all conditions.
+     * @param string        $table        Table name to query.
+     * @param array         $conditions   Optional WHERE conditions as column => value pairs.
+     *                                    All conditions share the same logical/comparison operators.
+     * @param array         $columnReturn Columns to return (default ["*"] for all columns).
+     * @param array         $extras       Optional associative array of SQL clauses to append
+     *                                    after WHERE/GROUP BY. Keys map to static methods in
+     *                                    App\Core\Utils\SQLBuilder\Extras, e.g.:
+     *                                    [
+     *                                      'groupBy' => 'username',
+     *                                      'orderBy' => ['uid', 'ASC'],
+     *                                      'limit'   => 10,
+     *                                      'offset'  => 5,
+     *                                    ]
+     * @param Logical       $logical      Logical operator (AND/OR) to join WHERE conditions.
+     * @param Comparison    $comparison   Comparison operator (=, LIKE, etc.) for all conditions.
+     * @param FetchOption   $fetchOption  Fetch mode (FETCH single row, FETCH_ALL, etc.).
      *
-     * @param string        $table          Table name.
-     * @param array         $conditions     Optional WHERE key/value pairs.
-     * @param array         $columnReturn   Columns to return, defaults to ["*"].
-     * @param Logical       $logical        Logical operator to join conditions.
-     * @param Comparison    $comparison     Comparison operator for each condition.
-     * @param FetchOption   $fetchOption    Fetch mode.
-     *
-     * @return array|stdClass|bool Query result or false if no records.
+     * @return array|stdClass|bool        Query result(s) according to $fetchOption,
+     *                                    or false if no matching rows.
      */
     protected function select(
         string $table, 
         array $conditions = [], 
         array $columnReturn = ["*"],
+        array $extras = [],
         Logical $logical = Logical::AND,
         Comparison $comparison = Comparison::EQUALS,
         FetchOption $fetchOption = FetchOption::FETCH
@@ -131,26 +140,32 @@ class Database {
         // Unless $conditions are supplied
         $sql = "SELECT $formattedColumnReturn FROM $table";
 
-        // Adds a WHERE to the SQL query if $conditions are specified
-        if (!empty($conditions)) {
-            $values = array_values($conditions); // The corresponding values
+        $values = array_values($conditions); // The corresponding values
 
+        // Adds a WHERE to the SQL query if $conditions are specified
+        if ($conditions) {
             if ($comparison == Comparison::LIKE) {
                 $values = array_map(fn($val) => "%$val%",$values);
             }
 
             // Generates the WHERE and concatenates it into the existing query
             $sql .= " WHERE " . Condition::generate($conditions, $logical, $comparison);
-
-            // return false; // For debugging
-
-            // Intitiates the query
-            return $this->query($sql, $values, $fetchOption);
         }
 
-        // return false; // For debugging
+        if ($extras) {
+            foreach ($extras as $keyword => $value) {
+                if (is_array($value)) {
+                    $sql .= Extras::$keyword(...$value);
+                }
+                else {
+                    $sql .= Extras::$keyword($value);
+                }
+            }
+        }
 
-        return $this->query($sql, option: $fetchOption);
+        echo "SQL: $sql<BR><BR>";
+
+        return $this->query($sql, $values, $fetchOption);
     }
 
 
@@ -184,7 +199,6 @@ class Database {
         $valuePlaceholders = implode(", ", array_fill(0, count($values), "?"));
 
         $sql = "INSERT INTO $table (uid, {$formattedColumns}) VALUES ($valuePlaceholders)";
-        // ECHO "sql: "; print_r($sql); ECHO "<BR>";
 
         return $this->query($sql, $values);
     }
@@ -216,7 +230,6 @@ class Database {
 
         // Generates the WHERE and concatenates it into the existing query
         $conditionWhere = Condition::generate(["uid" => $uid], $logical, $comparison);
-        // ECHO "conditionWhere: "; print_r($conditionWhere); ECHO "<BR>";
 
         $sql = "UPDATE $table SET $conditionSet WHERE $conditionWhere";
 
@@ -247,7 +260,6 @@ class Database {
         Comparison $comparison = Comparison::EQUALS
     ): bool {
         $sql = "DELETE FROM $table";
-        // ECHO "sql: "; print_r($sql); ECHO "<BR>";
 
         if ($conditions == "all") {
             return $this->query($sql);
@@ -255,10 +267,8 @@ class Database {
 
         // Generates the WHERE and concatenates it into the existing query
         $conditionWhere = Condition::generate($conditions, $logical, $comparison);
-        // ECHO "conditionWhere: "; print_r($conditionWhere); ECHO "<BR>";
 
         $sql .= " WHERE " . $conditionWhere;
-        // ECHO "sql: "; print_r($sql); ECHO "<BR>";
 
         return $this->query($sql, array_values($conditions));
     }
