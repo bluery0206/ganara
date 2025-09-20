@@ -72,7 +72,6 @@ class Condition {
         }
 
         $columnFilter = array_keys($conditions); // The columns for WHERE
-        // ECHO "values: "; print_r($values); ECHO "<BR>";
 
         // Creates predicates like "columnName = ?" per elemet of the array
         // Then contatenate each element of the array using the $logical

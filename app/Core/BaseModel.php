@@ -86,7 +86,7 @@ class BaseModel extends Database {
      * @param Comparison    $comparisonOperators Comparison operator for each condition.
      * @param FetchOption   $fetchOption Fetch mode (single or all).
      *
-     * @return stdClass|bool Single record as object, or false if none found.
+     * @return array|stdClass|bool Single record as object, or false if none found.
      */
     public function get(
         array $conditions = [], 
@@ -94,7 +94,42 @@ class BaseModel extends Database {
         Logical $logicalOperator = Logical::AND,
         Comparison $comparisonOperators = Comparison::EQUALS,
         FetchOption $fetchOption = FetchOption::FETCH
-    ): stdClass|bool {
+    ): array|stdClass|bool {
+        checkWrongKeys($this->columns, array_keys($conditions));
+
+        return $this->select(
+            $this->table,
+            $conditions, 
+            $columnReturn, 
+            $logicalOperator, 
+            $comparisonOperators, 
+            $fetchOption, 
+        );
+    }
+
+
+    /**
+     * Perform a fuzzy search on the table using SQL `LIKE`.
+     *
+     * Automatically wraps each provided condition value with
+     * percent signs (`%value%`) before building the query,
+     * so callers don’t need to add wildcards manually.
+     *
+     * @param array         $conditions             Column/value pairs to search against.
+     * @param array         $columnReturn           Columns to include in the result set (default: all).
+     * @param Logical       $logicalOperator        Logical connector between conditions (defaults to AND).
+     * @param Comparison    $comparisonOperators    Comparison operator (defaults to LIKE).
+     * @param FetchOption   $fetchOption            How the results should be fetched (defaults to FETCH_ALL).
+     *
+     * @return array|stdClass|bool  Array of matching rows, a single stdClass row, or false if nothing matches.
+     */
+    public function like(
+        array $conditions = [], 
+        array $columnReturn = ["*"],
+        Logical $logicalOperator = Logical::AND,
+        Comparison $comparisonOperators = Comparison::LIKE,
+        FetchOption $fetchOption = FetchOption::FETCH_ALL
+    ): array|stdClass|bool {
         checkWrongKeys($this->columns, array_keys($conditions));
 
         return $this->select(
@@ -113,11 +148,11 @@ class BaseModel extends Database {
      *
      * @param array $data Key/value pairs to insert.
      *
-     * @return stdClass|bool The created record as object, or false on failure.
+     * @return array|stdClass|bool The created record as object, or false on failure.
      */
     public function store(
         array $data,
-    ): StdClass|bool {
+    ): array|StdClass|bool {
         // ECHO "data: "; var_dump($data); ECHO "<BR>";
 
         checkWrongKeys($this->columns, array_keys($data));
@@ -136,9 +171,9 @@ class BaseModel extends Database {
      * @param string    $uid  Unique identifier (e.g., primary key).
      * @param array     $data Data to update.
      *
-     * @return stdClass|bool The updated record as object, or false on failure.
+     * @return array|stdClass|bool The updated record as object, or false on failure.
      */
-    public function edit(string $uid, array $data): stdClass|bool {
+    public function edit(string $uid, array $data): array|stdClass|bool {
         checkWrongKeys($this->columns, array_keys($data));
 
         $res = $this->update($this->table, $uid, $data);

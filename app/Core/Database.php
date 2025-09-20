@@ -80,13 +80,13 @@ class Database {
      * @param array             $values  Values to bind to placeholders.
      * @param FetchOption|null  $option  Optional fetch mode (e.g. FETCH or FETCH_ALL).
      *
-     * @return stdClass|bool Result object or true/false for non-fetch queries.
+     * @return array|stdClass|bool Result object or true/false for non-fetch queries.
      */
     protected function query(
         string $sql, 
         array $values = [], 
         FetchOption|Null $option = Null
-    ): stdClass|bool {
+    ): array|stdClass|bool {
         $stmt = $this->pdo->prepare($sql);
         $res = $stmt->execute($values);
 
@@ -111,7 +111,7 @@ class Database {
      * @param Comparison    $comparison     Comparison operator for each condition.
      * @param FetchOption   $fetchOption    Fetch mode.
      *
-     * @return stdClass|bool Query result or false if no records.
+     * @return array|stdClass|bool Query result or false if no records.
      */
     protected function select(
         string $table, 
@@ -120,7 +120,7 @@ class Database {
         Logical $logical = Logical::AND,
         Comparison $comparison = Comparison::EQUALS,
         FetchOption $fetchOption = FetchOption::FETCH
-    ): stdClass|bool {
+    ): array|stdClass|bool {
         // ECHO "table: "; print_r($table); ECHO "<BR>";
 
         // Contatenate each element of the array using a separator
@@ -134,6 +134,10 @@ class Database {
         // Adds a WHERE to the SQL query if $conditions are specified
         if (!empty($conditions)) {
             $values = array_values($conditions); // The corresponding values
+
+            if ($comparison == Comparison::LIKE) {
+                $values = array_map(fn($val) => "%$val%",$values);
+            }
 
             // Generates the WHERE and concatenates it into the existing query
             $sql .= " WHERE " . Condition::generate($conditions, $logical, $comparison);
@@ -156,9 +160,9 @@ class Database {
      * @param string    $table Table name.
      * @param array     $data  Key/value pairs for the insert.
      *
-     * @return stdClass|bool Insert result or false on failure.
+     * @return array|stdClass|bool Insert result or false on failure.
      */
-    protected function insert(string $table, array $data): stdClass|bool {
+    protected function insert(string $table, array $data): array|stdClass|bool {
         // Separates the columns and the values
         // Example:
         //      data=["username"=>"admin, "password"=>"admin123"]
@@ -195,7 +199,7 @@ class Database {
      * @param Logical       $logical    Logical operator for WHERE clause.
      * @param Comparison    $comparison Comparison operator for WHERE clause.
      *
-     * @return stdClass|bool Update result or false on failure.
+     * @return array|stdClass|bool Update result or false on failure.
      */
     protected function update(
         string $table,
@@ -203,7 +207,7 @@ class Database {
         array $data,
         Logical $logical = Logical::AND,
         Comparison $comparison = Comparison::EQUALS,
-    ): stdClass|bool {
+    ): array|stdClass|bool {
         // ECHO "uid: "; print_r($uid); ECHO "<BR>";
 
         // Using Condition class to generates predicates separated by ", " for 

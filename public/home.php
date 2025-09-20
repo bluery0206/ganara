@@ -3,6 +3,8 @@
 use App\Models\User;
 use App\Core\BaseModel;
 use App\Core\Validator;
+use App\Core\Enums\FetchOption;
+use App\Core\Enums\Operators\Comparison;
 
 include "../bootstrap.php";
 
@@ -26,11 +28,15 @@ $pageTitle = "Home";
     <!-- SELECT -->
     <div>
         <?php 
-        //     $user = $model->get([
-        //         "username" => "clark.namay",
-        //         "password" => "clark.namay",
-        //     ]);
-        // ?>
+            $users = $model->like([
+                "username" => "aori",
+                "password" => "aori",
+            ]);
+
+            foreach ($users as $user) {
+                echo $user->username . "<BR>";
+            }
+        ?>
     </div>
 
 
@@ -40,8 +46,10 @@ $pageTitle = "Home";
             // $ran = uniqid();
 
             // $res = $model->store([
-            //     "username" => $ran,
-            //     "password" => $ran,
+            //     // "username" => $ran,
+            //     // "password" => $ran,
+            //     "username" => "",
+            //     "password" => "",
             // ]);
 
             // echo $res->username;
@@ -85,19 +93,16 @@ $pageTitle = "Home";
     <div>
         <?php
 
+            // Dummy data
+            // $data = [
+            //     "username" => "dd",
+            //     "email" => "fiona.young@gmail.com",
+            //     "password" => "fiona.young",
+            // ];
 
-// Dummy data
-$data = [
-    "username" => "dd",
-    "email" => "fiona.young@gmail.com",
-    "password" => "fiona.young",
-];
-
-
-
-$violations = Validator::validate($model, $data);
-echo "Violations: <BR>";
-var_dump($violations);
+            // $violations = Validator::validate($model, $data);
+            // echo "Violations: <BR>";
+            // var_dump($violations);
 
         ?>
     </div>
