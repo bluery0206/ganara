@@ -2,6 +2,8 @@
 
 // namespace App\Core\Helpers;
 
+use App\Core\Enums\ByteToUnit;
+use App\Models\User;
 use App\Core\Exceptions\InvalidRouteException;
 
 
@@ -94,7 +96,7 @@ function isViewActive(string $view, string $returnOnTrue = "active"): string {
 
 
 /**
- * Summary of pluralize
+ * Returns the pluraized `$word` based on the common rules of pluralization in English
  * @param string $word
  * @return string
  */
@@ -116,10 +118,9 @@ function pluralize(string $word): string {
 
 
 /**
- * Summary of checkMissingKeys
+ * Returns the missing keys in `$data` that are `$required`
  * @param mixed $required
  * @param mixed $data
- * @throws \InvalidArgumentException
  * @return array
  */
 function checkMissingKeys($required, $data): array {
@@ -147,13 +148,12 @@ function checkMissingKeys($required, $data): array {
 
 
 /**
- * Summary of checkWrongKeys
- * @param mixed $allowed
- * @param mixed $data
- * @throws \InvalidArgumentException
+ * Returns the wrong keys in `$data` that doesn't exists in `$allowed`
+ * @param array $allowed
+ * @param array $data
  * @return array
  */
-function checkWrongKeys($allowed, $data): array {
+function checkWrongKeys(array $allowed, array $data): array {
     $wrongKeys = [];
 
     // ECHO "allowed: "; print_r($allowed); ECHO "<BR>";
@@ -175,4 +175,33 @@ function checkWrongKeys($allowed, $data): array {
     }
 
     return $wrongKeys;
+}
+
+
+/**
+ * Returns `True` if the `$_SESSION["user"]` or the given `$user` is logged-in.
+ * @param User|null $user
+ * @return bool|null
+ */
+function isAuthorized(User|null $user = null) {
+    if ($user) {
+        return $user == $_SESSION["user"] ?? null;
+    }
+
+    return isset($_SESSION["user"]);
+}
+
+
+
+/**
+ * Returns the converted `$value` to `$unit`. Defaults in megabyte
+ * @param int $value
+ * @param ByteToUnit $unit
+ * @return float|int
+ */
+function byteToUnit(
+    int $value, 
+    ByteToUnit $unit = ByteToUnit::MEGABYTE
+): float {
+    return $value / $unit->value;
 }

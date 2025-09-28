@@ -1,7 +1,8 @@
 <?php 
 
-use App\Core\Enums\FetchOption;
 use App\Models\User;
+use App\Core\Validator;
+use App\Core\Enums\FetchOption;
 
 include "../bootstrap.php";
 
@@ -25,27 +26,27 @@ $pageTitle = "Home";
     <!-- SELECT -->
     <div>
         <?php 
-            $users = $model->like([
-                    "username" => "aori"
-                ],
-                extras: [
-                    "groupBy" => 'username',
-                    "orderBy" => ["username", "ASC"],
-                    "limit" => 10
-                ],
-                fetchOption: FetchOption::FETCH_ALL
-            );
+            // $users = $model->like([
+            //         "username" => "aori"
+            //     ],
+            //     extras: [
+            //         "groupBy" => 'username',
+            //         "orderBy" => ["username", "ASC"],
+            //         "limit" => 10
+            //     ],
+            //     fetchOption: FetchOption::FETCH_ALL
+            // );
 
-            if (is_array($users)) {
-                foreach ($users as $user) {
-                    echo "USERNAME: $user->username<BR>";
-                    echo "PASSWORd: $user->password<BR>";
-                    echo "<BR>";
-                }
-            }
-            else {
-                print_r($users);
-            }
+            // if (is_array($users)) {
+            //     foreach ($users as $user) {
+            //         echo "USERNAME: $user->username<BR>";
+            //         echo "PASSWORd: $user->password<BR>";
+            //         echo "<BR>";
+            //     }
+            // }
+            // else {
+            //     print_r($users);
+            // }
         ?>
     </div>
 
@@ -105,14 +106,23 @@ $pageTitle = "Home";
 
             // Dummy data
             // $data = [
-            //     "username" => "dd",
+            //     "username" => "ddd",
             //     "email" => "fiona.young@gmail.com",
             //     "password" => "fiona.young",
+            //     "pathAvatar" => "/ambot"
             // ];
 
             // $violations = Validator::validate($model, $data);
             // echo "Violations: <BR>";
             // var_dump($violations);
+        ?>
+    </div>
+
+    <div>
+        <?php 
+        
+            // Validator::file("idk", "['udk', 'dsd']");
+
         ?>
     </div>
 </body>

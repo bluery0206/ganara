@@ -159,7 +159,7 @@ class Validator {
                     // echo $isValid ? " isValid: $isValid <BR>" : "<BR>";
                 }
                 else {
-                    [$isValid, $message] = Validator::$ruleData($data[$field]);
+                    [$isValid, $message] = Validator::$ruleData($data[$field] ?? null);
                     // echo "------ $rule, supplied: \"" . $data[$field] . "\" isValid: $isValid <BR>";
 
                     // I kept $isValid and $message separated for debugging and readability
@@ -180,5 +180,27 @@ class Validator {
         }
 
         return $violations;
+    }
+
+
+    // file:[]
+    public static function file(
+        string $path,
+        string $conditions,
+        string $errorMessage = "Too long"
+    ): array {
+        // if (True) {
+        //     throw new InvalidArgumentException(
+        //         "min() value must be either an int or a string."
+        //     );
+        // }
+        var_dump((array)$conditions);
+
+        return [False, $errorMessage];
+    }
+
+
+    public static function maxSize() {
+        
     }
 }

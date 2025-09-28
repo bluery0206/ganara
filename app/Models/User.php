@@ -31,6 +31,7 @@ class User extends BaseModel{
     public function __construct() {
         $this->columns = [
             "uid",
+            "pathAvatar",
             "username",
             "password",
             "email",
@@ -46,6 +47,7 @@ class User extends BaseModel{
             "username" => "min:3|max:25|required",
             "password" => "min:3|max:255|required",
             "email" => "min:3|max:255|email",
+            "pathAvatar" => "required",
         ];
 
         parent::__construct(__CLASS__);

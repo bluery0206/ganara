@@ -35,7 +35,7 @@ class Condition {
     /**
      * Build a SQL WHERE clause from an associative array of column/value pairs.
      *
-     * @param array<string,mixed> $conditions
+     * @param array $conditions
      *     Key/value pairs where the key is the column name
      *     and the value is the expected value to bind.
      * @param Logical|Separators $logical

@@ -7,7 +7,11 @@ namespace App\Core\Exceptions\Fields;
 use Exception;
 use Throwable;
 
-class BaseException extends Exception {
+
+/**
+ * The base class for form-field-based exceptions
+ */
+class BaseFieldException extends Exception {
     /**
      * Summary of field
      * @var string
