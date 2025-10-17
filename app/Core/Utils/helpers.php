@@ -184,6 +184,8 @@ function checkWrongKeys(array $allowed, array $data): array {
  * @return bool|null
  */
 function isAuthorized(User|null $user = null) {
+    session_start();
+
     if ($user) {
         return $user == $_SESSION["user"] ?? null;
     }

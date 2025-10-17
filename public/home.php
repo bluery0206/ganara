@@ -1,5 +1,6 @@
 <?php 
 
+use App\Controllers\AuthController;
 use App\Models\User;
 use App\Core\Validator;
 use App\Core\Enums\FetchOption;
@@ -123,6 +124,27 @@ $pageTitle = "Home";
         
             // Validator::file("idk", "['udk', 'dsd']");
 
+        ?>
+    </div>
+
+
+    <!-- AUTH -->
+
+    <!-- Login -->
+    <div>
+        <?php 
+
+            AuthController::register(
+                "aori.kasumi",
+                "aori.kasumi"
+            );
+
+        ?>
+    </div>
+    <div>
+        <?php 
+
+            var_dump(isAuthorized());
         ?>
     </div>
 </body>

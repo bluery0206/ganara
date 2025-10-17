@@ -13,7 +13,7 @@ const DIR_ASSET = DIR_ROOT . "/asset";
 # If you're in development and have multiple projects inside your `htdocs/` or `html/` folders, then
 # You can add those sub-directories here. For example: "/commissions/task-manager", else
 # If in deployment, where there should only be the project folder or files, leave "/" as is.
-const URL_BASE = "/boilerplate";
+const URL_BASE = "/php-projects/boilerplate";
 
 # Converted upper-cased (i.e.: HTTP/1.0) "PROTOCOL/NUMBER" into "protocol/number"; then
 # Separated the string by "/" resulted to ["protocol", "number"]; then

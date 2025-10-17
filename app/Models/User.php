@@ -17,7 +17,7 @@ use App\Core\BaseModel;
  *  - email        : User email address.
  *  - isAdmin      : Boolean/int flag for admin rights.
  *  - isStaff      : Boolean/int flag for staff rights.
- *  - isJudge      : Boolean/int flag for judge rights.
+ *  - isUser       : Boolean/int flag for user rights.
  *  - dateCreated  : Timestamp when the user was created.
  *  - dateUpdated  : Timestamp of the last update.
  *  - dateDeleted  : Timestamp when the record was soft-deleted.
@@ -37,7 +37,7 @@ class User extends BaseModel{
             "email",
             "isAdmin",
             "isStaff",
-            "isJudge",
+            "isUser",
             "dateCreated",
             "dateUpdated",
             "dateDeleted",
