@@ -24,6 +24,7 @@ $pageTitle = "Home";
     <?php $model = new User(); ?>
 
 
+
     <!-- SELECT -->
     <div>
         <?php 
@@ -37,19 +38,9 @@ $pageTitle = "Home";
             //     ],
             //     fetchOption: FetchOption::FETCH_ALL
             // );
-
-            // if (is_array($users)) {
-            //     foreach ($users as $user) {
-            //         echo "USERNAME: $user->username<BR>";
-            //         echo "PASSWORd: $user->password<BR>";
-            //         echo "<BR>";
-            //     }
-            // }
-            // else {
-            //     print_r($users);
-            // }
         ?>
     </div>
+
 
 
     <!-- INSERT -->
@@ -69,6 +60,7 @@ $pageTitle = "Home";
     </div>
 
 
+
     <!-- UPDATE -->
     <div>
         <?php 
@@ -82,6 +74,7 @@ $pageTitle = "Home";
     </div>
 
 
+
     <!-- DELETE -->
     <div>
         <?php 
@@ -90,6 +83,7 @@ $pageTitle = "Home";
             // var_dump($res); 
         ?>
     </div>
+
 
 
     <!-- DELETE ALL WITH CONDITION -->
@@ -102,6 +96,8 @@ $pageTitle = "Home";
     </div>
 
 
+
+    <!-- VALIDATION -->
     <div>
         <?php
 
@@ -119,32 +115,17 @@ $pageTitle = "Home";
         ?>
     </div>
 
-    <div>
-        <?php 
-        
-            // Validator::file("idk", "['udk', 'dsd']");
-
-        ?>
-    </div>
 
 
-    <!-- AUTH -->
-
-    <!-- Login -->
+    <!-- AUTHENTICATION: REGISTRATION -->
     <div>
         <?php 
 
-            AuthController::register(
-                "aori.kasumi",
-                "aori.kasumi"
-            );
+            // AuthController::register(
+            //     "aori.kasumi",
+            //     "aori.kasumi"
+            // );
 
-        ?>
-    </div>
-    <div>
-        <?php 
-
-            var_dump(isAuthorized());
         ?>
     </div>
 </body>

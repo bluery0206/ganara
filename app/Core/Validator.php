@@ -184,23 +184,23 @@ class Validator {
 
 
     // file:[]
-    public static function file(
-        string $path,
-        string $conditions,
-        string $errorMessage = "Too long"
-    ): array {
-        // if (True) {
-        //     throw new InvalidArgumentException(
-        //         "min() value must be either an int or a string."
-        //     );
-        // }
-        var_dump((array)$conditions);
+    // public static function file(
+    //     string $path,
+    //     string $conditions,
+    //     string $errorMessage = "Too long"
+    // ): array {
+    //     // if (True) {
+    //     //     throw new InvalidArgumentException(
+    //     //         "min() value must be either an int or a string."
+    //     //     );
+    //     // }
+    //     var_dump((array)$conditions);
 
-        return [False, $errorMessage];
-    }
+    //     return [False, $errorMessage];
+    // }
 
 
-    public static function maxSize() {
+    // public static function maxSize() {
         
-    }
+    // }
 }
