@@ -19,7 +19,7 @@ $pageTitle = "Home";
 
 <body>
     <!-- Navigation Bar -->
-    <?php include asset("components/nav/nav-main.php") ?>
+    <?php include asset("components/nav/navSample.php") ?>
 
     <?php $model = new User(); ?>
 

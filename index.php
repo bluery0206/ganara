@@ -2,4 +2,4 @@
 
 include "bootstrap.php";
 
-redirect("home");
+redirect("examples");

@@ -1,0 +1,95 @@
+
+.form-wrapper {
+    /* border: 1px solid red; */
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 75dvh;
+}
+
+.form {
+    /* border: 1px solid red; */
+    border: 1px solid var(--dark);
+    border-radius: 5px;
+    display: flex;
+    flex-direction: column;
+    row-gap: 25px;
+    box-shadow: 0px 0px 5px 0px rgba(80, 80, 80, 0.125);
+    padding: 20px;
+    min-width: 300px;
+}
+
+.form-header {
+    /* border: 1px solid red; */
+    display: flex;
+    flex-direction: column;
+}
+
+.form-body {
+    /* border: 1px solid red; */
+}
+
+.form-footer {
+    /* border: 1px solid red; */
+    display: flex;
+    flex-direction: column;
+    row-gap: 10px;
+}
+
+.form-group {
+    display: flex;
+    flex-direction: column;
+    row-gap: 20px;
+}
+
+.form-field {
+    /* border: 1px solid red; */
+    display: flex;
+    flex-direction: column;
+    row-gap: 5px;
+}
+
+.form-label {
+    /* border: 1px solid red; */
+    color: var(--text-dark);
+}
+
+.form-input {
+    /* border: 1px solid red; */
+    border: 1px solid var(--dark);
+    padding: 7px 10px;
+    border-radius: 5px;
+}
+
+.form-eye {
+    /* border: 1px solid red; */
+    display: grid;
+    grid-template-columns: auto min-content;
+    border: 1px solid var(--dark);
+    padding: 0 10px;
+    border-radius: 5px;
+    align-items: center;
+    gap: 5px;
+}
+
+.form-eye-input {
+    all: unset;
+    /* border: 1px solid red; */
+    padding: 7px 0px;
+}
+
+.form-eye-toggle {
+    all:unset;
+    cursor: pointer;
+}
+
+.form-eye-icon {
+    /* border: 1px solid red; */
+    height: 20px;
+    object-fit: contain;
+}
+
+.form-input::placeholder,
+.form-eye-input::placeholder {
+    font-size: 0.9rem;
+}

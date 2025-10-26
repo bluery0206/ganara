@@ -1,4 +1,6 @@
 {
+    "name": "mrhilario/ganara",
+    "description": "A PHP Framework wannabe that just works (mugana ra). Inspired by Laravel and Django",
     "require": {
         "vlucas/phpdotenv": "^5.6"
     },

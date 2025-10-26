@@ -1,7 +1,25 @@
 .btn {
     all: unset;
-    border: 1px solid red;
-    padding: 7px 14px;
+    padding: 7px 10px;
     border-radius: 6px;
     cursor: pointer;
+    font-size: 0.9em;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+}
+
+.btn:hover {
+    filter: brightness(120%);
+}
+
+.btn-primary {
+    background: var(--primary);
+    color: var(--text-white);
+}
+
+.active {
+    background: var(--primary);
+    color: var(--text-white);
 }
