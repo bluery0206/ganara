@@ -23,7 +23,7 @@ class BaseFieldException extends Exception {
         string $field,
         string $message,
         int $code = 0,
-        Throwable $previous = null,
+        Throwable|Null $previous,
     ) {
         $this->field = $field;
         parent::__construct($message, $code, $previous);

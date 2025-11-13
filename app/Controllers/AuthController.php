@@ -2,8 +2,8 @@
 
 namespace App\Controllers;
 
-use Exception;
 use App\Models\User;
+use App\Core\Exceptions\RowNotFoundException;
 
 class AuthController {
     public static function login(
@@ -23,7 +23,7 @@ class AuthController {
         $user = $userModel->get($data);
 
         if (empty($user)) {
-            throw new Exception("User not found. Login failed.");
+            throw new RowNotFoundException("Wrong username or password.");
         }
 
         session_start();

@@ -1,6 +1,9 @@
 <nav>
     <div class="brand">
-        Ganara
+        <a href="<?= route("examples") ?>" 
+            class="btn btn-nav">
+            Ganara
+        </a>
     </div>
     <div class="menu">
         <!-- Show the home button only if logged in -->
